@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setOnClicks() {
         mainAccTakeFromGalleryBtn.setOnClickListener {
-            val tempFileToSavePictureFromCamera = FileHelper.createTempFile(this.cacheDir)
+            val tempFileToSavePictureFromCamera = FileHelper.createFile(filesDir)
             uriToSavePictureFromCamera =
                 FileProvider.getUriForFile(
                     this,
