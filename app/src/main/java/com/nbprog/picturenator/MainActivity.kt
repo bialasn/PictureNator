@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -29,14 +28,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val selectImageFromGalleryResult = registerForActivityResult(GetContent()) { uri ->
-        uri?.let {
-            val imageStream = contentResolver.openInputStream(it)
-            val selectedImage = BitmapFactory.decodeStream(imageStream)
-            val bitmapFileModel = FileHelper.BitmapFileModel(
-                this.cacheDir, selectedImage, AVATAR_FILENAME_PREFIX, AVATAR_EXT
-            )
-        }
+    val imageFromGalleryResult = GetPictureFromGallery(this) {
+        setPathFromCapturedAndSavedImage(it.absolutePath)
     }
 
 
@@ -44,7 +37,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setOnClicks()
-        setPathFromCapturedAndSavedImage()
+        setPathFromCapturedAndSavedImage("kkkkkk")
+        lifecycle
     }
 
     private fun setOnClicks() {
@@ -59,12 +53,12 @@ class MainActivity : AppCompatActivity() {
             takeImageResult.launch(uriToSavePictureFromCamera)
         }
         mainAccOpenCameraBtn.setOnClickListener {
-            selectImageFromGalleryResult.launch("image/*")
+            imageFromGalleryResult.getPicture()
         }
     }
 
-    private fun setPathFromCapturedAndSavedImage() {
-        mainAccPathTxt.text = "Tu będzie path"
+    private fun setPathFromCapturedAndSavedImage(path: String) {
+        mainAccPathTxt.text = path
     }
 
 
