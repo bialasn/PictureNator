@@ -1,35 +1,27 @@
 package com.nbprog.picturenator
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts.TakePicture
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
+import com.nbprog.picturenator.extension.toBitmap
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    val AVATAR_FILENAME_PREFIX = "avatar"
-    val AVATAR_EXT = ".jpeg"
-
     var uriToSavePictureFromCamera: Uri? = null
 
-    private val takeImageResult = registerForActivityResult(TakePicture()) { isSuccess ->
-        if (isSuccess) {
-            uriToSavePictureFromCamera?.let {
-                val imageStream = contentResolver.openInputStream(it)
-                val selectedImage = BitmapFactory.decodeStream(imageStream)
-                val bitmapFileModel = FileHelper.BitmapFileModel(
-                    this.cacheDir, selectedImage, AVATAR_FILENAME_PREFIX, AVATAR_EXT
-                )
-            }
-        }
+    private val takeImageFromCameraResult = GetPictureFromCamera(this) {
+        setPathFromCapturedAndSavedImage(it.absolutePath)
+        val bitmap = FileHelper.getBitmapFromPath(it.path)
+        mainAccImageCaptured.setImageBitmap(bitmap)
     }
 
     val imageFromGalleryResult = GetPictureFromGallery(this) {
         setPathFromCapturedAndSavedImage(it.absolutePath)
+        val bitmap = FileHelper.getBitmapFromPath(it.path)
+        mainAccImageCaptured.setImageBitmap(bitmap)
     }
 
 
@@ -38,23 +30,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setOnClicks()
         setPathFromCapturedAndSavedImage("kkkkkk")
-        lifecycle
+        checkRecentlySavedFiles()
     }
 
     private fun setOnClicks() {
         mainAccTakeFromGalleryBtn.setOnClickListener {
-            val tempFileToSavePictureFromCamera = FileHelper.createFile(filesDir)
-            uriToSavePictureFromCamera =
-                FileProvider.getUriForFile(
-                    this,
-                    "${BuildConfig.APPLICATION_ID}.provider",
-                    tempFileToSavePictureFromCamera
-                )
-            takeImageResult.launch(uriToSavePictureFromCamera)
+            takeImageFromCameraResult.getPicture("${BuildConfig.APPLICATION_ID}.provider")
         }
         mainAccOpenCameraBtn.setOnClickListener {
             imageFromGalleryResult.getPicture()
         }
+    }
+
+    private fun checkRecentlySavedFiles() {
+        val filesInDir = this.filesDir.listFiles()
+        filesInDir?.forEach {
+            Log.d("FILES", it.name)
+        }
+        val takeTwoWithLastModified = filesInDir?.sortedByDescending { it.lastModified() }?.take(2)
+        recentlySavedPicture1?.setImageBitmap(takeTwoWithLastModified?.first()?.toBitmap())
+        recentlySavedPicture2?.setImageBitmap(takeTwoWithLastModified?.last()?.toBitmap())
     }
 
     private fun setPathFromCapturedAndSavedImage(path: String) {

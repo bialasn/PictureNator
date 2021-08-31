@@ -40,9 +40,33 @@
         android:id="@+id/mainAccImageCaptured"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainAccPathTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/mainAccPathTxt"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/recentlySavedPicture1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainAccImageCaptured"
+        app:layout_constraintEnd_toStartOf="@id/recentlySavedPicture2"
+        tools:src="@drawable/ic_launcher_background" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/recentlySavedPicture2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/recentlySavedPicture1"
+
+        app:layout_constraintTop_toBottomOf="@+id/mainAccImageCaptured"
+        tools:src="@drawable/ic_launcher_background" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
