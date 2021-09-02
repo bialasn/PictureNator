@@ -1,6 +1,10 @@
 # PictureNator
 Library for downloading photos from gallery and camera.
 
+Colab:
+
+https://github.com/MikolajBB
+
 
 build.gradle(module:app)
 
@@ -8,7 +12,7 @@ build.gradle(module:app)
     repositories {
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }  <- this line
+        maven { url 'https://jitpack.io' }  <- add this line
     }
 }
 
