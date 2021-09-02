@@ -9,8 +9,6 @@ import java.io.FileOutputStream
 object FileHelper {
 
     fun createFile(directory: File, prefix: String? = null, suffix: String? = null): File {
-        //system current time millis
-        //timestamp
         val timeStamp = System.currentTimeMillis().toString()
         var fileName = timeStamp
         prefix?.let { fileName = prefix + fileName }
@@ -19,7 +17,6 @@ object FileHelper {
         return File(directory, fileName)
     }
 
-    //przetestowac bo wyjebuje
     fun saveBitmapIntoFile(bitmap: Bitmap, destinationFile: File): File {
         val byteArrayOutputStream = bitmap.toOutputStream()
         val fos = FileOutputStream(destinationFile)
@@ -30,13 +27,13 @@ object FileHelper {
         return destinationFile
     }
 
-    fun getFileByPath(path: String): File {
-        return File(path)
-    }
-
     fun getBitmapFromPath(path: String): Bitmap {
         val file = getFileByPath(path)
         return file.toBitmap()
+    }
+
+    private fun getFileByPath(path: String): File {
+        return File(path)
     }
 
     data class BitmapFileModel(
