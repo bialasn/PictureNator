@@ -48,8 +48,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("FILES", it.name)
         }
         val takeTwoWithLastModified = filesInDir?.sortedByDescending { it.lastModified() }?.take(2)
-        recentlySavedPicture1?.setImageBitmap(takeTwoWithLastModified?.first()?.toBitmap())
-        recentlySavedPicture2?.setImageBitmap(takeTwoWithLastModified?.last()?.toBitmap())
+        if (takeTwoWithLastModified.isNullOrEmpty().not()){
+            recentlySavedPicture1?.setImageBitmap(takeTwoWithLastModified?.first()?.toBitmap())
+            recentlySavedPicture2?.setImageBitmap(takeTwoWithLastModified?.last()?.toBitmap())
+        }
+
     }
 
     private fun setPathFromCapturedAndSavedImage(path: String) {
